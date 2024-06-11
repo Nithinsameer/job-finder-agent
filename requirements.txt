@@ -2,3 +2,5 @@ openai
 pyresparser
 spacy
 requests
+pdfminer.six
+python-docx
