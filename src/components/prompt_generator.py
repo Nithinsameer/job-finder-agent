@@ -1,8 +1,10 @@
 from langchain_community.agent_toolkits.load_tools import load_tools
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
+from typing import Any
 import openai
 from openai import OpenAI
+from langchain_core.tools import Tool
 import os
 from dotenv import load_dotenv
 from langchain_community.tools.tavily_search import TavilySearchResults
@@ -11,6 +13,7 @@ from langchain.agents import AgentExecutor, create_openai_functions_agent
 from langchain_openai import ChatOpenAI
 from resume_parser import extract_text_from_file, extract_skills_with_llm
 from langchain_community.utilities import SerpAPIWrapper
+from langchain.utilities import GoogleSerperAPIWrapper
 
 load_dotenv()
 tool = TavilySearchResults()
@@ -31,7 +34,7 @@ def prompt_generator(skills):
     )
     return response.choices[0].message.content
 
-skills = "Python, R, MySQL, Exploratory.io, Tableau, HTML/CSS/JavaScript, Latex, Databricks, Selenium, Scikit-learn, TensorFlow, PyTorch, Seaborn, Scipy, Statsmodel, Keras, NLTK, Langchain, TF-IDF vectorization, OpenAI's GPT-3.5-turbo model, Streamlit, Databricks/Python/Keras, Logistic Regression, K-Means, Decision Trees, Prophet, Flask, MongoDB, OCR, Sentence Embedding"
+# skills = "Python, R, MySQL, Exploratory.io, Tableau, HTML/CSS/JavaScript, Latex, Databricks, Selenium, Scikit-learn, TensorFlow, PyTorch, Seaborn, Scipy, Statsmodel, Keras, NLTK, Langchain, TF-IDF vectorization, OpenAI's GPT-3.5-turbo model, Streamlit, Databricks/Python/Keras, Logistic Regression, K-Means, Decision Trees, Prophet, Flask, MongoDB, OCR, Sentence Embedding"
 
 # generated_prompt = prompt_generator(skills)
 # print("Generated Prompt:", generated_prompt)
@@ -70,9 +73,35 @@ skills = extract_skills_with_llm(resume_text)
 
 # agent_executor.invoke({"input": prompt_generator(skills)})
 
+def joblistings(query: str):
+    result = search.results(query)
+    return result
+
+def title_link(postings: dict) -> list[Any]:
+    links_list = []
+    for i in range(20):
+        link = postings.get("organic")[i].get("link")
+        links_list.append(link)
+
+    return links_list
+
+
+
+search = GoogleSerperAPIWrapper()
 llm = ChatOpenAI(temperature=0, model_name ="gpt-3.5-turbo")
-tool_names =['serpapi']
-tools=load_tools(tool_names,llm)
+tools = [
+    Tool(
+        name="Get Job Listings",
+        func= joblistings,
+        description="useful for when you need to ask with search and find job listings",
+    ),
+    Tool(
+        name="Get Job Links",
+        func= title_link,
+        description="Extracts the link from the results",
+    )
+]
+#tools=load_tools(tool_names,llm)
 agent=initialize_agent(tools,llm,agent='zero-shot-react-description', verbose=True)
 
-agent.run(f"20 Entry Level Data Scientist jobs listed in the last 24 hours in the United States")
+agent.run(f"Give me a list of 20 Entry Level Data Scientist jobs listed in the last 1 week in the United States")
