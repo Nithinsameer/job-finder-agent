@@ -19,9 +19,9 @@ def extract_text_from_file(file_path):
 def extract_skills_with_llm(resume_text):
 
     prompt = (
-        "Extract key skills and technologies from the following resume:\n\n"
+        "Understand the following resume and give me the Comma seperated list of corporate roles that the candidate is most suitable for:\n\n"
         f"{resume_text}\n\n"
-        "Comma seperated list of skills and technologies:"
+        #"Based on the key skills extracted give me the Comma seperated list of roles that the candidate is most suitable for:"
     )
 
 
