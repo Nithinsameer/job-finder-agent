@@ -96,7 +96,7 @@ for section in ['responsibilities', 'qualifications', 'preferred qualifications'
 
 # Iterate through each row
 for index, row in df.iterrows():
-    url = row['job_url']
+    url = row['link']
     print(f"\nProcessing job {index + 1}/{len(df)}: {url}")
     
     # Fetch job details
@@ -113,6 +113,6 @@ for index, row in df.iterrows():
 
 # Save the updated DataFrame back to CSV
 print("\nSaving results to CSV...")
-df.to_csv('jobs_with_details_v2.csv', index=False)
+df.to_csv('jobs_with_details.csv', index=False)
 
 print("Job details fetching completed. Results saved to 'jobs_with_details.csv'")
