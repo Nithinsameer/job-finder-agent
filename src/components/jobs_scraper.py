@@ -24,11 +24,11 @@ driver.get("https://www.linkedin.com/jobs/")
 
 # Enter email
 email_input = driver.find_element(By.ID, "session_key")
-email_input.send_keys("ynsameer@gmail.com")
+email_input.send_keys("")
 
 # Enter password
 password_input = driver.find_element(By.ID, "session_password")
-password_input.send_keys("Nitins@meer02")
+password_input.send_keys("")
 
 # Click the sign-in button
 sign_in_button = driver.find_element(By.CLASS_NAME, "sign-in-form__submit-btn--full-width")

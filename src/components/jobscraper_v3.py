@@ -24,11 +24,11 @@ driver.get("https://www.linkedin.com/jobs/")
 
 # Enter email
 email_input = driver.find_element(By.ID, "session_key")
-email_input.send_keys("ynsameer@gmail.com")
+email_input.send_keys("")
 
 # Enter password
 password_input = driver.find_element(By.ID, "session_password")
-password_input.send_keys("Nitins@meer02")
+password_input.send_keys("")
 
 # Click the sign-in button
 sign_in_button = driver.find_element(By.CLASS_NAME, "sign-in-form__submit-btn--full-width")
@@ -97,18 +97,23 @@ except NoSuchElementException as e:
 # Wait for the page to load
 time.sleep(5)
 
-# Close the driver
-# Scrape job details
 job_listings = []
+
+# Wait for the job cards to be present
+time.sleep(5)
 
 job_cards = driver.find_elements(By.CSS_SELECTOR, "li.jobs-search-results__list-item")
 
 for job_card in job_cards:
     try:
-        job_title = job_card.find_element(By.CSS_SELECTOR, "a.job-card-list__title").text
-        company = job_card.find_element(By.CSS_SELECTOR, "div.artdeco-entity-lockup__subtitle span.job-card-container__primary-description").text
-        location = job_card.find_element(By.CSS_SELECTOR, "div.artdeco-entity-lockup__caption ul li").text
-        job_url = job_card.find_element(By.CSS_SELECTOR, "a.job-card-list__title").get_attribute("href")
+        job_title_element = job_card.find_element(By.CSS_SELECTOR, "a.job-card-list__title")
+        company_element = job_card.find_element(By.CSS_SELECTOR, "div.artdeco-entity-lockup__subtitle span.job-card-container__primary-description")
+        location_element = job_card.find_element(By.CSS_SELECTOR, "div.artdeco-entity-lockup__caption ul li")
+
+        job_title = job_title_element.text if job_title_element else "N/A"
+        company = company_element.text if company_element else "N/A"
+        location = location_element.text if location_element else "N/A"
+        job_url = job_title_element.get_attribute("href") if job_title_element else "N/A"
         
         job_listings.append({
             "Job Title": job_title,
@@ -116,7 +121,8 @@ for job_card in job_cards:
             "Location": location,
             "URL": job_url
         })
-    except NoSuchElementException:
+    except NoSuchElementException as e:
+        print(f"An element was not found: {e}")
         continue
 
 # Convert to DataFrame and save to CSV
