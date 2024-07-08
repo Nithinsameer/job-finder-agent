@@ -1,3 +1,5 @@
 .env
 src/components/redun
 /output
+/data
+/env
