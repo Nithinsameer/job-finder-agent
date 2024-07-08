@@ -21,10 +21,9 @@ class GroqResumeAnalyzer:
     def generate_search_terms(self, resume_text: str) -> List[str]:
         prompt = f"""
         Analyze the following resume and generate 5 effective professional job search terms.
-        Focus on industry-relevant job titles in data science, data analytics, and machine learning fields.
+        Focus on industry-relevant job titles 
         The terms should match the candidate's skills and experience level.
         Avoid using academic titles or any software testing roles.
-        Consider the candidate's background in data analysis, Python programming, and machine learning.
 
         Resume:
         {resume_text}
@@ -62,12 +61,12 @@ class GroqResumeAnalyzer:
 # Usage
 if __name__ == "__main__":
     analyzer = GroqResumeAnalyzer()
-    resume_path = 'output/Nithin_Sameer_Yerramilli_June.pdf'
+    resume_path = 'data/SREERAM BANGARU Resume.pdf'
     resume_text = analyzer.extract_text_from_file(resume_path)
     search_terms = analyzer.generate_search_terms(resume_text)
     print("\nGenerated professional job search terms:", search_terms)
 
     # Optional: Save search terms to a JSON file
-    with open('search_terms.json', 'w') as f:
+    with open('output/search_terms.json', 'w') as f:
         json.dump({"search_terms": search_terms}, f, indent=2)
     print("Search terms saved to search_terms.json")
