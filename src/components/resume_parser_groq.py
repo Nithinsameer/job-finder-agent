@@ -67,6 +67,6 @@ if __name__ == "__main__":
     print("\nGenerated professional job search terms:", search_terms)
 
     # Optional: Save search terms to a JSON file
-    with open('output/search_terms.json', 'w') as f:
+    with open('search_terms.json', 'w') as f:
         json.dump({"search_terms": search_terms}, f, indent=2)
     print("Search terms saved to search_terms.json")
