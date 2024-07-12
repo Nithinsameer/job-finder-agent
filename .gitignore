@@ -3,3 +3,7 @@ src/components/redun
 /output
 /data
 /env
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
